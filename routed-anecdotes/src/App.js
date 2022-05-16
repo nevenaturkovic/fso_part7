@@ -92,10 +92,11 @@ const CreateNew = (props) => {
   // const [content, setContent] = useState("")
   // const [author, setAuthor] = useState("")
   // const [info, setInfo] = useState("")
+  const { reset: resetContent, ...content } = useField("text")
+  const { reset: resetAuthor, ...author } = useField("text")
+  const { reset: resetInfo, ...info } = useField("text")
 
-  const content = useField("text")
-  const author = useField("text")
-  const info = useField("text")
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -105,12 +106,13 @@ const CreateNew = (props) => {
       info: info.value,
       votes: 0,
     })
+    navigate("/")
   }
 
   const resetButton = () => {
-    content.reset()
-    author.reset()
-    info.reset()
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -120,28 +122,31 @@ const CreateNew = (props) => {
         <div>
           content
           <input
-            name="content"
-            value={content.value}
-            type={content.type}
-            onChange={content.onChange}
+            // name="content"
+            // value={content.value}
+            // type={content.type}
+            // onChange={content.onChange}
+            {...content}
           />
         </div>
         <div>
           author
           <input
-            name="author"
-            value={author.value}
-            type={author.type}
-            onChange={author.onChange}
+            // name="author"
+            // value={author.value}
+            // type={author.type}
+            // onChange={author.onChange}
+            {...author}
           />
         </div>
         <div>
           url for more info
           <input
-            name="info"
-            value={info.value}
-            type={info.type}
-            onChange={info.onChange}
+            // name="info"
+            // value={info.value}
+            // type={info.type}
+            // onChange={info.onChange}
+            {...info}
           />
         </div>
         <input type="submit" value="create" />
