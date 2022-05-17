@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImN2ZWtsaWNhMTIzIiwiaWQiOiI2MjgzYTVhNmEyNzYwZTVkMDc0M2I2MDYiLCJpYXQiOjE2NTI3OTQ4MzN9.thV5Oo0yTQwuFJU847N3DDs10V2gejgLODNMnGbJ65c
+
+{
+    "url": "https://google.com/",
+    "title": "Skroz Novi User's blogpost",
+    "author": "Flekica",
+    "likes": 12
+}
