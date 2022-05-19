@@ -20,6 +20,7 @@ import blogReducer, {
   setBlogs,
   createBlog,
   changeBlog,
+  deleteBlog,
 } from "./reducers/blogReducer"
 
 const App = () => {
@@ -87,18 +88,16 @@ const App = () => {
     if (!ok) {
       return
     }
-
-    blogService.remove(id).then(() => {
-      const updatedBlogs = blogs.filter((b) => b.id !== id).sort(byLikes)
-      setBlogs(updatedBlogs)
-    })
+    dispatch(deleteBlog(id))
   }
 
   const likeBlog = async (id) => {
     const currentLikes = blogs.find((b) => b.id === id).likes
-    dispatch(changeBlog(id, {likes: currentLikes + 1})).then((changedBlog) => {
-      notify(`you liked '${changedBlog.title}' by ${changedBlog.author}`)
-    })
+    dispatch(changeBlog(id, { likes: currentLikes + 1 })).then(
+      (changedBlog) => {
+        notify(`you liked '${changedBlog.title}' by ${changedBlog.author}`)
+      }
+    )
   }
 
   const notify = (message, type = "info") => {
