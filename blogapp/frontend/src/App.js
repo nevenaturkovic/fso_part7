@@ -10,7 +10,7 @@ import blogService from "./services/blogs"
 import loginService from "./services/login"
 import userService from "./services/user"
 
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {
   createNotification,
   clearNotification,
@@ -19,25 +19,22 @@ import blogReducer, {
   initializeBlogs,
   setBlogs,
   createBlog,
+  changeBlog,
 } from "./reducers/blogReducer"
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  // const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
+
+  const blogs = useSelector((state) => state.blogs)
+  const [user, setUser] = useState(null)
 
   const byLikes = (b1, b2) => (b2.likes > b1.likes ? 1 : -1)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs.sort(byLikes)))
-  }, [])
-
-  // useEffect(() => {
-  //   dispatch(initializeBlogs())
-  // }, [dispatch])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const userFromStorage = userService.getUser()
@@ -98,19 +95,9 @@ const App = () => {
   }
 
   const likeBlog = async (id) => {
-    const toLike = blogs.find((b) => b.id === id)
-    const liked = {
-      ...toLike,
-      likes: (toLike.likes || 0) + 1,
-      user: toLike.user.id,
-    }
-
-    blogService.update(liked.id, liked).then((updatedBlog) => {
-      notify(`you liked '${updatedBlog.title}' by ${updatedBlog.author}`)
-      const updatedBlogs = blogs
-        .map((b) => (b.id === id ? updatedBlog : b))
-        .sort(byLikes)
-      setBlogs(updatedBlogs)
+    const currentLikes = blogs.find((b) => b.id === id).likes
+    dispatch(changeBlog(id, {likes: currentLikes + 1})).then((changedBlog) => {
+      notify(`you liked '${changedBlog.title}' by ${changedBlog.author}`)
     })
   }
 

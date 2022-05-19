@@ -7,14 +7,15 @@ const blogSlice = createSlice({
   name: "blogs",
   initialState: [],
   reducers: {
-    increaseLikes(state, action) {
-      const id = action.payload
-      const blogToChange = state.find((n) => n.id === id)
-      const changedBlog = {
-        ...blogToChange,
-        likes: blogToChange.likes + 1,
-      }
-      return state.map((blog) => (blog.id !== id ? blog : changedBlog))
+    swapBlog(state, action) {
+      const newBlog = action.payload
+      //   const id = action.payload
+      //   const blogToChange = state.find((n) => n.id === id)
+      //   const changedBlog = {
+      //     ...blogToChange,
+      //     likes: blogToChange.likes + 1,
+      //   }
+      return state.map((blog) => (blog.id !== newBlog.id ? blog : newBlog))
     },
     appendBlog(state, action) {
       state.push(action.payload)
@@ -25,7 +26,7 @@ const blogSlice = createSlice({
   },
 })
 
-export const { increaseLikes, appendBlog, setBlogs } = blogSlice.actions
+export const { swapBlog, appendBlog, setBlogs } = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -42,31 +43,12 @@ export const createBlog = (content) => {
   }
 }
 
-// const vote = (id) => {
-//     dispatch(increaseVotes(id))
-//     const anecdoteText = sortedAnecdotes.find(
-//       (anecdote) => anecdote.id === id
-//     ).content
-//     dispatch(
-//       createNotification({
-//         message: `you voted '${anecdoteText}'`,
-//         kind: "info",
-//       })
-//     )
-//     setTimeout(() => {
-//       dispatch(clearNotification())
-//     }, 5000)
-//   }
-
-// export const likeBlog = (blog) => {
-//   return async (dispatch) => {
-//     const changedBlog = await blogService.update({
-//       ...blogToChange,
-//       likes: blogToChange.likes + 1,
-//     })
-//     dispa
-//     dispatch(appendBlog(changedBlog))
-//   }
-// }
+export const changeBlog = (id, newBlogContents) => {
+  return async (dispatch) => {
+    const changedBlog = await blogService.update(id, newBlogContents)
+    dispatch(swapBlog(changedBlog))
+    return changedBlog
+  }
+}
 
 export default blogSlice.reducer

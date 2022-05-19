@@ -9,6 +9,7 @@
     "axios": "^0.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "prop-types": "^15.8.1",
     "react-redux": "^8.0.1",
     "react-scripts": "5.0.0",
     "redux": "^4.2.0",
@@ -41,12 +42,14 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:3003",
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "cypress": "^9.4.1",
-    "deep-freeze": "^0.0.1",
+    "cypress": "^9.5.4",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-jest": "^26.0.0"
+    "eslint-plugin-jest": "^26.1.4",
+    "jest-watch-typeahead": "^0.6.5"
   }
 }
