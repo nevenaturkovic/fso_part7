@@ -15,12 +15,18 @@ import {
   createNotification,
   clearNotification,
 } from "./reducers/notificationReducer"
+import blogReducer, {
+  initializeBlogs,
+  setBlogs,
+  createBlog,
+} from "./reducers/blogReducer"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   // const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
+
   const byLikes = (b1, b2) => (b2.likes > b1.likes ? 1 : -1)
 
   const dispatch = useDispatch()
@@ -28,6 +34,10 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs.sort(byLikes)))
   }, [])
+
+  // useEffect(() => {
+  //   dispatch(initializeBlogs())
+  // }, [dispatch])
 
   useEffect(() => {
     const userFromStorage = userService.getUser()
@@ -58,17 +68,14 @@ const App = () => {
     notify("good bye!")
   }
 
-  const createBlog = async (blog) => {
-    blogService
-      .create(blog)
-      .then((createdBlog) => {
-        notify(
-          `a new blog '${createdBlog.title}' by ${createdBlog.author} added`
-        )
-        setBlogs(blogs.concat(createdBlog))
-        blogFormRef.current.toggleVisibility()
+  const addBlog = async (blog) => {
+    blogFormRef.current.toggleVisibility()
+    dispatch(createBlog(blog))
+      .then((newBlog) => {
+        notify(`a new blog '${newBlog.title}' by ${newBlog.author} added`)
       })
       .catch((error) => {
+        console.log("error", error)
         notify("creating a blog failed: " + error.response.data.error, "alert")
       })
   }
@@ -118,10 +125,6 @@ const App = () => {
       dispatch(clearNotification())
     }, 5000)
   }
-  // setNotification({ message, type })
-  // setTimeout(() => {
-  //   setNotification(null)
-  // }, 5000)
 
   if (user === null) {
     return (
@@ -144,7 +147,7 @@ const App = () => {
       </div>
 
       <Togglable buttonLabel="new note" ref={blogFormRef}>
-        <NewBlogForm onCreate={createBlog} />
+        <NewBlogForm onCreate={addBlog} />
       </Togglable>
 
       <div id="blogs">
