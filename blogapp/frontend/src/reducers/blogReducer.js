@@ -9,13 +9,9 @@ const blogSlice = createSlice({
   reducers: {
     swapBlog(state, action) {
       const newBlog = action.payload
-      //   const id = action.payload
-      //   const blogToChange = state.find((n) => n.id === id)
-      //   const changedBlog = {
-      //     ...blogToChange,
-      //     likes: blogToChange.likes + 1,
-      //   }
-      return state.map((blog) => (blog.id !== newBlog.id ? blog : newBlog))
+      return state
+        .map((blog) => (blog.id !== newBlog.id ? blog : newBlog))
+        .sort(byLikes)
     },
     appendBlog(state, action) {
       state.push(action.payload)
