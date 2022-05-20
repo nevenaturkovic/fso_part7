@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
+import { Routes, Route, Link, useMatch } from "react-router-dom"
 
 import Blog from "./components/Blog"
 import LoginForm from "./components/LoginForm"
@@ -32,6 +32,7 @@ const App = () => {
 
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
+  const users = useSelector((state) => state.users)
 
   const byLikes = (b1, b2) => (b2.likes > b1.likes ? 1 : -1)
 
@@ -127,6 +128,30 @@ const App = () => {
     )
   }
 
+  const SingularUser = ({ user }) => {
+    if (!user) {
+      return null
+    }
+    return (
+      <div>
+        <h2>{user.name}</h2>
+        <strong>added blogs</strong>
+        <ul>
+          {user.blogs.map((blog) => (
+            <li key={blog.id}>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  const match = useMatch("/users/:id")
+  const singleUser = match
+    ? users.find((user) => user.id === match.params.id)
+    : null
+
   if (user === null) {
     return (
       <>
@@ -147,18 +172,11 @@ const App = () => {
         <button onClick={logout}>logout</button>
       </div>
 
-      {/* <UsersList /> */}
-      <Router>
-        {/* <div>
-        <Link style={padding} to="/users">users</Link>
-      </div> */}
-
-        <Routes>
-          <Route path="/" element={<BlogsList />} />
-          <Route path="/users" element={<UsersList />} />
-          {/* <Route path="/" element={<Home />} /> */}
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<BlogsList />} />
+        <Route path="/users" element={<UsersList />} />
+        <Route path="/users/:id" element={<SingularUser user={singleUser} />} />
+      </Routes>
     </div>
   )
 }
