@@ -123,11 +123,11 @@ const App = () => {
       <Notification />
 
       <div>
-        {user.name} logged in
+        <p>{user.name} logged in</p>
         <button onClick={logout}>logout</button>
       </div>
 
-      <Togglable buttonLabel="new note" ref={blogFormRef}>
+      <Togglable buttonLabel="create new" ref={blogFormRef}>
         <NewBlogForm onCreate={addBlog} />
       </Togglable>
 
