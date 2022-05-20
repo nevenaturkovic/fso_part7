@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm"
 import NewBlogForm from "./components/NewBlogForm"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
+import UsersList from "./components/UsersList"
 
 import blogService from "./services/blogs"
 import loginService from "./services/login"
@@ -16,6 +17,7 @@ import {
   clearNotification,
 } from "./reducers/notificationReducer"
 import { setUser, initializeUser, clearUser } from "./reducers/userReducer"
+import { initializeUsers } from "./reducers/usersReducer"
 import blogReducer, {
   initializeBlogs,
   setBlogs,
@@ -37,6 +39,7 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
     dispatch(initializeUser())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   const login = async (username, password) => {
@@ -139,6 +142,7 @@ const App = () => {
           />
         ))}
       </div>
+      <UsersList />
     </div>
   )
 }
