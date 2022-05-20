@@ -33,7 +33,7 @@ export const setUser = (user) => {
 export const clearUser = () => {
   return async (dispatch) => {
     userService.clearUser()
-    dispatch(setUser(null))
+    dispatch(setUserState(null))
   }
 }
 
