@@ -147,9 +147,28 @@ const App = () => {
     )
   }
 
-  const match = useMatch("/users/:id")
-  const singleUser = match
-    ? users.find((user) => user.id === match.params.id)
+  const SingleBlog = ({ blog }) => {
+    return (
+      <div>
+        <h2>{blog.title}</h2>
+        <a href={blog.url}>{blog.url}</a>
+        <div>
+          {blog.likes} likes{" "}
+          <button onClick={() => likeBlog(blog.id)}>like</button>
+        </div>
+        added by {blog.author}
+      </div>
+    )
+  }
+
+  const matchUser = useMatch("/users/:id")
+  const singleUser = matchUser
+    ? users.find((user) => user.id === matchUser.params.id)
+    : null
+
+  const matchBlog = useMatch("/blogs/:id")
+  const singleBlog = matchBlog
+    ? blogs.find((blog) => blog.id === matchBlog.params.id)
     : null
 
   if (user === null) {
@@ -176,6 +195,7 @@ const App = () => {
         <Route path="/" element={<BlogsList />} />
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<SingularUser user={singleUser} />} />
+        <Route path="/blogs/:id" element={<SingleBlog blog={singleBlog} />} />
       </Routes>
     </div>
   )
