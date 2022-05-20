@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { Routes, Route, Link, useMatch } from "react-router-dom"
+import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom"
 
 import Blog from "./components/Blog"
 import LoginForm from "./components/LoginForm"
@@ -109,6 +109,33 @@ const App = () => {
     }, 5000)
   }
 
+  const matchUser = useMatch("/users/:id")
+  const singleUser = matchUser
+    ? users.find((user) => user.id === matchUser.params.id)
+    : null
+
+  const matchBlog = useMatch("/blogs/:id")
+  const singleBlog = matchBlog
+    ? blogs.find((blog) => blog.id === matchBlog.params.id)
+    : null
+
+  const Menu = ({ user }) => {
+    const padding = {
+      paddingRight: 5,
+    }
+    return (
+      <div>
+        <Link style={padding} to="/">
+          blogs
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+        <em>{user.name} logged in</em> <button onClick={logout}>logout</button>
+      </div>
+    )
+  }
+
   const BlogsList = () => {
     return (
       <div id="blogs">
@@ -161,16 +188,6 @@ const App = () => {
     )
   }
 
-  const matchUser = useMatch("/users/:id")
-  const singleUser = matchUser
-    ? users.find((user) => user.id === matchUser.params.id)
-    : null
-
-  const matchBlog = useMatch("/blogs/:id")
-  const singleBlog = matchBlog
-    ? blogs.find((blog) => blog.id === matchBlog.params.id)
-    : null
-
   if (user === null) {
     return (
       <>
@@ -182,14 +199,15 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <Menu user={user} />
+      <h2>blog app</h2>
 
       <Notification />
 
-      <div>
+      {/* <div>
         <p>{user.name} logged in</p>
         <button onClick={logout}>logout</button>
-      </div>
+      </div> */}
 
       <Routes>
         <Route path="/" element={<BlogsList />} />
