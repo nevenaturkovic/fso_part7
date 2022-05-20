@@ -15,6 +15,7 @@ import {
   createNotification,
   clearNotification,
 } from "./reducers/notificationReducer"
+import { setUser, initializeUser, clearUser } from "./reducers/userReducer"
 import blogReducer, {
   initializeBlogs,
   setBlogs,
@@ -27,7 +28,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   const blogs = useSelector((state) => state.blogs)
-  const [user, setUser] = useState(null)
+  const user = useSelector((state) => state.user)
 
   const byLikes = (b1, b2) => (b2.likes > b1.likes ? 1 : -1)
 
@@ -35,14 +36,8 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUser())
   }, [dispatch])
-
-  useEffect(() => {
-    const userFromStorage = userService.getUser()
-    if (userFromStorage) {
-      setUser(userFromStorage)
-    }
-  }, [])
 
   const login = async (username, password) => {
     loginService
@@ -51,8 +46,7 @@ const App = () => {
         password,
       })
       .then((user) => {
-        setUser(user)
-        userService.setUser(user)
+        dispatch(setUser(user))
         notify(`${user.name} logged in!`)
       })
       .catch(() => {
@@ -61,8 +55,7 @@ const App = () => {
   }
 
   const logout = () => {
-    setUser(null)
-    userService.clearUser()
+    dispatch(clearUser())
     notify("good bye!")
   }
 
@@ -73,7 +66,6 @@ const App = () => {
         notify(`a new blog '${newBlog.title}' by ${newBlog.author} added`)
       })
       .catch((error) => {
-        console.log("error", error)
         notify("creating a blog failed: " + error.response.data.error, "alert")
       })
   }
