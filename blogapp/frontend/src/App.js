@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react"
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 
 import Blog from "./components/Blog"
 import LoginForm from "./components/LoginForm"
@@ -107,6 +108,25 @@ const App = () => {
     }, 5000)
   }
 
+  const BlogsList = () => {
+    return (
+      <div id="blogs">
+        <Togglable buttonLabel="create new" ref={blogFormRef}>
+          <NewBlogForm onCreate={addBlog} />
+        </Togglable>
+        {blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeBlog={likeBlog}
+            removeBlog={removeBlog}
+            user={user}
+          />
+        ))}
+      </div>
+    )
+  }
+
   if (user === null) {
     return (
       <>
@@ -127,22 +147,18 @@ const App = () => {
         <button onClick={logout}>logout</button>
       </div>
 
-      <Togglable buttonLabel="create new" ref={blogFormRef}>
-        <NewBlogForm onCreate={addBlog} />
-      </Togglable>
+      {/* <UsersList /> */}
+      <Router>
+        {/* <div>
+        <Link style={padding} to="/users">users</Link>
+      </div> */}
 
-      <div id="blogs">
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            likeBlog={likeBlog}
-            removeBlog={removeBlog}
-            user={user}
-          />
-        ))}
-      </div>
-      <UsersList />
+        <Routes>
+          <Route path="/" element={<BlogsList />} />
+          <Route path="/users" element={<UsersList />} />
+          {/* <Route path="/" element={<Home />} /> */}
+        </Routes>
+      </Router>
     </div>
   )
 }
