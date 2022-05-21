@@ -1,6 +1,7 @@
 import { useState } from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
+import { Table } from "react-bootstrap"
 
 const BlogDetails = ({ blog, visible, likeBlog, removeBlog, own }) => {
   if (!visible) return null
@@ -34,19 +35,26 @@ const Blog = ({ blog, likeBlog, removeBlog, user }) => {
 
   return (
     <div style={style} className="blog">
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
-      </Link>
-      <button onClick={() => setVisible(!visible)}>
-        {visible ? "hide" : "view"}
-      </button>
-      <BlogDetails
-        blog={blog}
-        visible={visible}
-        likeBlog={likeBlog}
-        removeBlog={removeBlog}
-        own={blog.user && user.username === blog.user.username}
-      />
+      <Table striped>
+        <tbody>
+          <tr key={blog.id}>
+            <td>
+              <Link to={`/blogs/${blog.id}`}>{blog.title} </Link>
+            </td>
+            <td>{blog.author}</td>
+          </tr>
+          {/* <button onClick={() => setVisible(!visible)}>
+            {visible ? "hide" : "view"}
+          </button> */}
+          <BlogDetails
+            blog={blog}
+            visible={visible}
+            likeBlog={likeBlog}
+            removeBlog={removeBlog}
+            own={blog.user && user.username === blog.user.username}
+          />
+        </tbody>
+      </Table>
     </div>
   )
 }
