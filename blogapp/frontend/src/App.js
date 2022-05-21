@@ -25,6 +25,7 @@ import blogReducer, {
   createBlog,
   changeBlog,
   deleteBlog,
+  commentBlog,
 } from "./reducers/blogReducer"
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
+  const comment = useSelector((state) => state.comment)
 
   const byLikes = (b1, b2) => (b2.likes > b1.likes ? 1 : -1)
 
@@ -174,7 +176,17 @@ const App = () => {
     )
   }
 
+  const handleCommentSubmit = (event) => {
+    event.preventDefault()
+    const commentToAdd = event.target.comment.value
+    event.target.comment.value = ""
+    dispatch(commentBlog(singleBlog, commentToAdd))
+  }
+
   const SingleBlog = ({ blog }) => {
+    if (!blog) {
+      return null
+    }
     return (
       <div>
         <h2>{blog.title}</h2>
@@ -185,6 +197,14 @@ const App = () => {
         </div>
         added by {blog.author}
         <h3>comments</h3>
+        <form onSubmit={handleCommentSubmit}>
+          <div>
+            <input value={comment} id="comment" type="text" />
+            <button id="comment-button" type="submit">
+              add comment
+            </button>
+          </div>
+        </form>
         <ul>
           {blog.comments.map((comment, id_c) => (
             <li key={id_c}>{comment}</li>
