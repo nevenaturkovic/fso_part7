@@ -184,6 +184,12 @@ const App = () => {
           <button onClick={() => likeBlog(blog.id)}>like</button>
         </div>
         added by {blog.author}
+        <h3>comments</h3>
+        <ul>
+          {blog.comments.map((comment, id_c) => (
+            <li key={id_c}>{comment}</li>
+          ))}
+        </ul>
       </div>
     )
   }

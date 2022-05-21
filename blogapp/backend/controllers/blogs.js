@@ -63,9 +63,6 @@ router.put("/:id", async (request, response) => {
 
 router.post("/:id/comments", async (request, response) => {
   const body = request.body
-  console.log('body', body)
-  console.log('request', request)
-
 
   if (!body) {
     return response.status(400).json({
@@ -83,11 +80,8 @@ router.post("/:id/comments", async (request, response) => {
       .end()
   }
 
-  console.log("request.params.id", request.params.id)
-  console.log("blog", blog)
   blog.comments.push(body.comment)
   blog.save()
-  console.log("blog", blog)
   response.json(blog)
 })
 
