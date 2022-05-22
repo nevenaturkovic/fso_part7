@@ -60,10 +60,9 @@ export const deleteBlog = (id) => {
 
 export const commentBlog = (blog, comment) => {
   return async (dispatch) => {
-    const updatedBlog = await blogService.update(blog.id, {
-      comments: blog.comments.concat([comment]),
-    })
+    const updatedBlog = await blogService.createComment(blog.id, comment)
     dispatch(swapBlog(updatedBlog))
   }
 }
+
 export default blogSlice.reducer

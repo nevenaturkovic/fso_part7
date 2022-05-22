@@ -80,7 +80,15 @@ router.post("/:id/comments", async (request, response) => {
       .end()
   }
 
-  blog.comments.push(body.comment)
+  if (!blog.text) {
+    return response
+      .status(400)
+      .json({
+        error: "missing field 'text'",
+      })
+      .end()
+  }
+  blog.comments.push(body.text)
   blog.save()
   response.json(blog)
 })
